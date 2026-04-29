@@ -128,7 +128,20 @@ final class ClaudeAutomator {
         log(LogEntry(level: .info, message: "Submitting via Return"))
         sendKey(keyCode: 36) // Return
 
+        // Wipe our prompt off the system pasteboard once Claude has it. We
+        // only clear if the pasteboard still matches what we wrote — that
+        // way we don't clobber anything the user copied in the meantime.
+        Thread.sleep(forTimeInterval: 0.4)
+        clearPasteboardIfMatches(prompt)
+
         log(LogEntry(level: .info, message: "Done"))
+    }
+
+    private func clearPasteboardIfMatches(_ text: String) {
+        let pasteboard = NSPasteboard.general
+        if pasteboard.string(forType: .string) == text {
+            pasteboard.clearContents()
+        }
     }
 
     // MARK: - Steps

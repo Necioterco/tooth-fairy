@@ -13,8 +13,16 @@ set -e
 # Prerequisites (already set up if you've shipped TapCut):
 #   1. Paid Apple Developer account.
 #   2. "Developer ID Application" certificate in Keychain.
-#   3. notarytool keychain profile (defaults to `tapcut-notary` since it's
-#      tied to the Apple ID, not the app — reuse across apps on the same team).
+#   3. notarytool keychain profile named "moonlit-notary":
+#
+#      xcrun notarytool store-credentials "moonlit-notary" \
+#          --apple-id "your@email.com" \
+#          --team-id  "UNEZ2C9AKH" \
+#          --password "your-app-specific-password"
+#
+#      (the alias is just a Keychain label; profiles tied to the same
+#      Apple ID/team work for any app, so reusing one across projects is
+#      fine — pick whichever name you like and override via NOTARY_PROFILE)
 #
 # Usage:
 #   ./scripts/build-dmg.sh
@@ -31,7 +39,7 @@ APP_NAME="Moonlit"
 BUNDLE_NAME="Moonlit"
 BUNDLE_ID="com.mario.Moonlit"
 TEAM_ID="${TEAM_ID:-UNEZ2C9AKH}"
-NOTARY_PROFILE="${NOTARY_PROFILE:-tapcut-notary}"
+NOTARY_PROFILE="${NOTARY_PROFILE:-moonlit-notary}"
 ENTITLEMENTS_FILE="$PROJECT_ROOT/Moonlit/Moonlit.entitlements"
 
 VERSION=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "$PROJECT_ROOT/Moonlit/Info.plist" 2>/dev/null || echo "0.1.0")
