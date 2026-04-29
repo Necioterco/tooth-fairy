@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Moonlit — Schedule overnight Claude desktop runs</title>
-  <meta name="description" content="A tiny Mac menu bar app that runs Claude desktop tasks while you sleep. Pick a folder, set the time, write the prompt — Moonlit drives Claude on your behalf." />
-  <meta property="og:title" content="Moonlit — Schedule overnight Claude desktop runs" />
-  <meta property="og:description" content="A tiny Mac menu bar app that runs Claude desktop tasks while you sleep." />
+  <title>Moonlit — Run Claude desktop on your local repo, overnight</title>
+  <meta name="description" content="A tiny Mac menu bar app that schedules Claude desktop runs against your local project folder. Use it when Routines can't reach your code." />
+  <meta property="og:title" content="Moonlit — Run Claude desktop on your local repo, overnight" />
+  <meta property="og:description" content="A tiny Mac menu bar app that schedules Claude desktop runs against your local project folder. Use it when Routines can't reach your code." />
   <meta property="og:type" content="website" />
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -15,8 +15,8 @@
     <header class="hero">
       <div class="logo" aria-hidden="true">🌙</div>
       <h1>Moonlit</h1>
-      <p class="tagline">Schedule overnight Claude desktop runs.</p>
-      <p class="sub">A tiny Mac menu bar app that picks the project folder, switches to Auto mode, pastes your prompt, and hits send — while you sleep.</p>
+      <p class="tagline">Schedule Claude desktop runs against your local repo.</p>
+      <p class="sub">A tiny menu bar app that drives the Claude desktop app on your Mac at a scheduled time. For tasks that need access to <em>your actual files</em> — your branch with uncommitted changes, your local MCP servers, your real dev environment.</p>
 
       <div class="cta-row">
         <a class="cta primary" href="https://github.com/Necioterco/moonlit/releases/latest/download/Moonlit.dmg" rel="noopener">
@@ -28,6 +28,13 @@
       </div>
       <p class="meta">Free · macOS 13+ · Requires Claude desktop</p>
     </header>
+
+    <aside class="advisory">
+      <div class="advisory-icon" aria-hidden="true">💡</div>
+      <div>
+        <strong>Already have <a href="https://www.anthropic.com/news/agent-skills" rel="noopener">Routines</a>?</strong> If your task doesn't need local files, use those instead — they run in Anthropic's cloud, on a real cron, even when your Mac is off. Moonlit is for the cases Routines can't reach: <em>your local code, your machine, your environment.</em>
+      </div>
+    </aside>
 
     <section class="preview" aria-label="Moonlit interface preview">
       <div class="popup">
@@ -68,24 +75,67 @@
     <section class="features">
       <div class="feature">
         <div class="emoji">📂</div>
-        <h3>Folder-based projects</h3>
-        <p>Point Moonlit at a folder. It opens that folder in Claude before each run — no fragile name matching.</p>
+        <h3>Real local folders</h3>
+        <p>Points at a folder on your Mac. Claude opens it as a project on your actual machine — uncommitted changes, local MCP servers, the works.</p>
       </div>
       <div class="feature">
         <div class="emoji">⚡</div>
         <h3>Auto mode</h3>
-        <p>Optional toggle flips Claude into Auto mode before sending. Long-running tasks run uninterrupted.</p>
+        <p>Optional toggle flips Claude into Auto mode before sending so long unattended runs don't stop on every confirm prompt.</p>
       </div>
       <div class="feature">
         <div class="emoji">⏰</div>
         <h3>Scheduled or instant</h3>
-        <p>Schedule for 10pm or run now. Pending, running, succeeded, failed — all tracked in a clean log.</p>
+        <p>Schedule a one-shot for 10pm, or hit Run now. Pending, running, succeeded, failed — all tracked in a clean log.</p>
       </div>
       <div class="feature">
         <div class="emoji">🪶</div>
         <h3>Lives in the menu bar</h3>
         <p>No dock icon. No window juggling. Click the moon, write a prompt, go to bed.</p>
       </div>
+    </section>
+
+    <section class="compare">
+      <h2>Moonlit vs Routines</h2>
+      <p class="compare-sub">Anthropic's official Routines feature already covers most overnight scheduling. Moonlit only fills the local-execution gap.</p>
+      <div class="compare-table">
+        <div class="compare-row compare-head">
+          <div></div>
+          <div>Routines</div>
+          <div>Moonlit</div>
+        </div>
+        <div class="compare-row">
+          <div>Where it runs</div>
+          <div>Anthropic cloud</div>
+          <div>Your Mac</div>
+        </div>
+        <div class="compare-row">
+          <div>Mac can be asleep</div>
+          <div>✓</div>
+          <div>✗</div>
+        </div>
+        <div class="compare-row">
+          <div>Recurring (cron)</div>
+          <div>✓</div>
+          <div>One-shot only</div>
+        </div>
+        <div class="compare-row">
+          <div>Local files / repo</div>
+          <div>✗ (sandboxed)</div>
+          <div>✓</div>
+        </div>
+        <div class="compare-row">
+          <div>Local MCP servers</div>
+          <div>✗</div>
+          <div>✓</div>
+        </div>
+        <div class="compare-row">
+          <div>Local CLIs / dev env</div>
+          <div>✗</div>
+          <div>✓</div>
+        </div>
+      </div>
+      <p class="compare-tip"><strong>Rule of thumb:</strong> if the task could run on a fresh cloud sandbox with just a GitHub clone, use Routines. If it needs your branch, your services, your tools — use Moonlit.</p>
     </section>
 
     <section class="how">
