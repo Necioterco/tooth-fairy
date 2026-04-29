@@ -130,6 +130,158 @@ h1 {
   color: var(--text-muted);
 }
 
+.preview {
+  display: flex;
+  justify-content: center;
+  margin: 8px 0 64px;
+}
+
+.popup {
+  width: 100%;
+  max-width: 420px;
+  background: rgba(255, 255, 255, 0.98);
+  color: #1c1a2a;
+  border-radius: 14px;
+  box-shadow:
+    0 30px 80px rgba(20, 18, 31, 0.55),
+    0 8px 24px rgba(167, 139, 250, 0.18);
+  overflow: hidden;
+  font-size: 14px;
+}
+
+.popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+}
+
+.popup-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.popup-title .moon {
+  font-size: 18px;
+}
+
+.popup-dots {
+  color: #6e6a87;
+  font-size: 18px;
+  letter-spacing: 1px;
+  cursor: default;
+}
+
+.popup-divider {
+  height: 1px;
+  background: rgba(20, 18, 31, 0.08);
+}
+
+.popup-section-label {
+  padding: 12px 16px 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #6e6a87;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.popup-section-label .count {
+  font-weight: 500;
+  color: #a8a4c2;
+  font-size: 11px;
+}
+
+.popup-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 16px 14px;
+}
+
+.status-dot {
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.row-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.row-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.chip {
+  background: rgba(167, 139, 250, 0.15);
+  color: #6d28d9;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.row-time {
+  font-size: 12px;
+  color: #6e6a87;
+}
+
+.row-prompt {
+  color: #1c1a2a;
+  font-size: 14px;
+}
+
+.row-action {
+  background: none;
+  border: 0;
+  cursor: default;
+  color: #6d28d9;
+  font-size: 13px;
+  padding: 2px 4px;
+  margin-top: 2px;
+}
+
+.row-action[aria-label="More options"] {
+  color: #6e6a87;
+}
+
+.popup-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  font-size: 12px;
+  color: #6e6a87;
+}
+
+.footer-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.footer-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #a78bfa;
+  display: inline-block;
+}
+
+.footer-version {
+  color: #a8a4c2;
+  font-size: 11px;
+}
+
 .features {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
