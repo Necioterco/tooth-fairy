@@ -145,9 +145,22 @@ else
     echo "  Unsigned DMG: $DMG_FINAL"
 fi
 
+# ── Stable-filename copy ───────────────────────────────────────────────────
+# Maintain `dist/Moonlit.dmg` alongside the versioned DMG so the website's
+# "Download for macOS" button can use a permalink that survives version bumps:
+#   https://github.com/Necioterco/moonlit/releases/latest/download/Moonlit.dmg
+DMG_STABLE="$DIST_DIR/Moonlit.dmg"
+cp "$DMG_FINAL" "$DMG_STABLE"
+echo "✓ Stable copy: $DMG_STABLE"
+
 # ── Done ───────────────────────────────────────────────────────────────────
 echo ""
 echo "═══ Build complete ═══"
-echo "  App:  $APP_PATH"
-echo "  DMG:  $DMG_FINAL"
-echo "  Size: $(du -h "$DMG_FINAL" | cut -f1)"
+echo "  App:    $APP_PATH"
+echo "  DMG:    $DMG_FINAL"
+echo "  Stable: $DMG_STABLE"
+echo "  Size:   $(du -h "$DMG_FINAL" | cut -f1)"
+echo ""
+echo "→ To publish:"
+echo "    gh release create v$VERSION \"$DMG_FINAL\" \"$DMG_STABLE\" \\"
+echo "        --title \"Moonlit v$VERSION\" --notes \"…\""
