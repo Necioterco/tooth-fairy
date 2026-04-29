@@ -1,0 +1,327 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A001000000000000000000A1 /* MoonlitApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A001000000000000000000B1 /* MoonlitApp.swift */; };
+		A001000000000000000000A2 /* ScheduledTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = A001000000000000000000B2 /* ScheduledTask.swift */; };
+		A001000000000000000000A3 /* TaskStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A001000000000000000000B3 /* TaskStore.swift */; };
+		A001000000000000000000A4 /* AXElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = A001000000000000000000B4 /* AXElement.swift */; };
+		A001000000000000000000A5 /* AutomationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A001000000000000000000B5 /* AutomationError.swift */; };
+		A001000000000000000000A6 /* ClaudeAutomator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A001000000000000000000B6 /* ClaudeAutomator.swift */; };
+		A001000000000000000000A7 /* Scheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A001000000000000000000B7 /* Scheduler.swift */; };
+		A001000000000000000000A8 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A001000000000000000000B8 /* MenuBarView.swift */; };
+		A001000000000000000000A9 /* TaskRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A001000000000000000000B9 /* TaskRow.swift */; };
+		A001000000000000000000AA /* AddTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A001000000000000000000BA /* AddTaskView.swift */; };
+		A001000000000000000000AB /* TaskDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A001000000000000000000BB /* TaskDetailView.swift */; };
+		A001000000000000000000AC /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A001000000000000000000BE /* AboutView.swift */; };
+		A001000000000000000000AD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A001000000000000000000BF /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A001000000000000000000B0 /* Moonlit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Moonlit.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A001000000000000000000B1 /* MoonlitApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoonlitApp.swift; sourceTree = "<group>"; };
+		A001000000000000000000B2 /* ScheduledTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduledTask.swift; sourceTree = "<group>"; };
+		A001000000000000000000B3 /* TaskStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskStore.swift; sourceTree = "<group>"; };
+		A001000000000000000000B4 /* AXElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AXElement.swift; sourceTree = "<group>"; };
+		A001000000000000000000B5 /* AutomationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutomationError.swift; sourceTree = "<group>"; };
+		A001000000000000000000B6 /* ClaudeAutomator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeAutomator.swift; sourceTree = "<group>"; };
+		A001000000000000000000B7 /* Scheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scheduler.swift; sourceTree = "<group>"; };
+		A001000000000000000000B8 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
+		A001000000000000000000B9 /* TaskRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskRow.swift; sourceTree = "<group>"; };
+		A001000000000000000000BA /* AddTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskView.swift; sourceTree = "<group>"; };
+		A001000000000000000000BB /* TaskDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailView.swift; sourceTree = "<group>"; };
+		A001000000000000000000BE /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
+		A001000000000000000000BF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A001000000000000000000BC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A001000000000000000000BD /* Moonlit.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Moonlit.entitlements; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A001000000000000000000C0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A001000000000000000000D0 = {
+			isa = PBXGroup;
+			children = (
+				A001000000000000000000D1 /* Moonlit */,
+				A001000000000000000000D9 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A001000000000000000000D1 /* Moonlit */ = {
+			isa = PBXGroup;
+			children = (
+				A001000000000000000000B1 /* MoonlitApp.swift */,
+				A001000000000000000000D2 /* Models */,
+				A001000000000000000000D3 /* Automation */,
+				A001000000000000000000D4 /* Views */,
+				A001000000000000000000BF /* Assets.xcassets */,
+				A001000000000000000000BC /* Info.plist */,
+				A001000000000000000000BD /* Moonlit.entitlements */,
+			);
+			path = Moonlit;
+			sourceTree = "<group>";
+		};
+		A001000000000000000000D2 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A001000000000000000000B2 /* ScheduledTask.swift */,
+				A001000000000000000000B3 /* TaskStore.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A001000000000000000000D3 /* Automation */ = {
+			isa = PBXGroup;
+			children = (
+				A001000000000000000000B4 /* AXElement.swift */,
+				A001000000000000000000B5 /* AutomationError.swift */,
+				A001000000000000000000B6 /* ClaudeAutomator.swift */,
+				A001000000000000000000B7 /* Scheduler.swift */,
+			);
+			path = Automation;
+			sourceTree = "<group>";
+		};
+		A001000000000000000000D4 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A001000000000000000000B8 /* MenuBarView.swift */,
+				A001000000000000000000B9 /* TaskRow.swift */,
+				A001000000000000000000BA /* AddTaskView.swift */,
+				A001000000000000000000BB /* TaskDetailView.swift */,
+				A001000000000000000000BE /* AboutView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A001000000000000000000D9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A001000000000000000000B0 /* Moonlit.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A001000000000000000000E0 /* Moonlit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A001000000000000000000F8 /* Build configuration list for PBXNativeTarget "Moonlit" */;
+			buildPhases = (
+				A001000000000000000000E1 /* Sources */,
+				A001000000000000000000C0 /* Frameworks */,
+				A001000000000000000000E2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Moonlit;
+			productName = Moonlit;
+			productReference = A001000000000000000000B0 /* Moonlit.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A001000000000000000000F0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					A001000000000000000000E0 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = A001000000000000000000F4 /* Build configuration list for PBXProject "Moonlit" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A001000000000000000000D0;
+			productRefGroup = A001000000000000000000D9 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A001000000000000000000E0 /* Moonlit */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A001000000000000000000E2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A001000000000000000000AD /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A001000000000000000000E1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A001000000000000000000A1 /* MoonlitApp.swift in Sources */,
+				A001000000000000000000A2 /* ScheduledTask.swift in Sources */,
+				A001000000000000000000A3 /* TaskStore.swift in Sources */,
+				A001000000000000000000A4 /* AXElement.swift in Sources */,
+				A001000000000000000000A5 /* AutomationError.swift in Sources */,
+				A001000000000000000000A6 /* ClaudeAutomator.swift in Sources */,
+				A001000000000000000000A7 /* Scheduler.swift in Sources */,
+				A001000000000000000000A8 /* MenuBarView.swift in Sources */,
+				A001000000000000000000A9 /* TaskRow.swift in Sources */,
+				A001000000000000000000AA /* AddTaskView.swift in Sources */,
+				A001000000000000000000AB /* TaskDetailView.swift in Sources */,
+				A001000000000000000000AC /* AboutView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A001000000000000000000F5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A001000000000000000000F6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		A001000000000000000000F9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Moonlit/Moonlit.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Moonlit/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mario.Moonlit;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A001000000000000000000FA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Moonlit/Moonlit.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Moonlit/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mario.Moonlit;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A001000000000000000000F4 /* Build configuration list for PBXProject "Moonlit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A001000000000000000000F5 /* Debug */,
+				A001000000000000000000F6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A001000000000000000000F8 /* Build configuration list for PBXNativeTarget "Moonlit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A001000000000000000000F9 /* Debug */,
+				A001000000000000000000FA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A001000000000000000000F0 /* Project object */;
+}
