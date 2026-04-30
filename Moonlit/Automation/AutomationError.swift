@@ -18,7 +18,7 @@ enum AutomationError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .accessibilityNotGranted:
-            return "Moonlit needs Accessibility permission. Open System Settings → Privacy & Security → Accessibility and enable Moonlit."
+            return "Tooth Fairy needs Accessibility permission. Open System Settings → Privacy & Security → Accessibility and enable Tooth Fairy."
         case .appNotFound:
             return "Claude desktop app not installed."
         case .appNotReady:

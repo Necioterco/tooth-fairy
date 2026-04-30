@@ -65,17 +65,17 @@ final class Scheduler: ObservableObject {
                 )
                 taskStore.setStatus(.succeeded, for: task.id)
                 taskStore.appendLog(LogEntry(level: .info, message: "Task succeeded"), to: task.id)
-                notify(title: "Moonlit ✓", body: shortPreview(of: task.prompt))
+                notify(title: "Tooth Fairy ✓", body: shortPreview(of: task.prompt))
             } catch let error as AutomationError {
                 let reason = error.errorDescription ?? "\(error)"
                 taskStore.setStatus(.failed, for: task.id, failureReason: reason)
                 taskStore.appendLog(LogEntry(level: .error, message: reason), to: task.id)
-                notify(title: "Moonlit failed", body: reason)
+                notify(title: "Tooth Fairy failed", body: reason)
             } catch {
                 let reason = "\(error)"
                 taskStore.setStatus(.failed, for: task.id, failureReason: reason)
                 taskStore.appendLog(LogEntry(level: .error, message: reason), to: task.id)
-                notify(title: "Moonlit failed", body: reason)
+                notify(title: "Tooth Fairy failed", body: reason)
             }
         }
     }

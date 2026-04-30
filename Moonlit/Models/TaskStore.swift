@@ -9,9 +9,18 @@ final class TaskStore: ObservableObject {
 
     init() {
         let supportDir = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-        let appDir = supportDir.appendingPathComponent("Moonlit", isDirectory: true)
+        let appDir = supportDir.appendingPathComponent("Tooth Fairy", isDirectory: true)
         try? FileManager.default.createDirectory(at: appDir, withIntermediateDirectories: true)
-        self.fileURL = appDir.appendingPathComponent("tasks.json")
+        // Migrate any pre-rename data from the old "Moonlit" support folder
+        // so existing users don't lose their scheduled tasks.
+        let legacyDir = supportDir.appendingPathComponent("Moonlit", isDirectory: true)
+        let legacyFile = legacyDir.appendingPathComponent("tasks.json")
+        let newFile = appDir.appendingPathComponent("tasks.json")
+        if FileManager.default.fileExists(atPath: legacyFile.path),
+           !FileManager.default.fileExists(atPath: newFile.path) {
+            try? FileManager.default.copyItem(at: legacyFile, to: newFile)
+        }
+        self.fileURL = newFile
         load()
     }
 
@@ -60,7 +69,7 @@ final class TaskStore: ObservableObject {
             decoder.dateDecodingStrategy = .iso8601
             tasks = try decoder.decode([ScheduledTask].self, from: data)
         } catch {
-            print("[Moonlit] failed to load tasks: \(error)")
+            print("[ToothFairy] failed to load tasks: \(error)")
         }
     }
 
@@ -72,7 +81,7 @@ final class TaskStore: ObservableObject {
             let data = try encoder.encode(tasks)
             try data.write(to: fileURL, options: .atomic)
         } catch {
-            print("[Moonlit] failed to save tasks: \(error)")
+            print("[ToothFairy] failed to save tasks: \(error)")
         }
     }
 }

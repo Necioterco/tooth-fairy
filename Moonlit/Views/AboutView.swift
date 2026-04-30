@@ -43,23 +43,23 @@ struct AboutView: View {
     private var content: some View {
         VStack(spacing: 16) {
             Spacer(minLength: 12)
-            Image(systemName: "moon.stars.fill")
+            Image(systemName: "sparkles")
                 .font(.system(size: 56))
                 .foregroundStyle(LinearGradient(
-                    colors: [.purple, .indigo],
+                    colors: [.pink, .purple],
                     startPoint: .top,
                     endPoint: .bottom
                 ))
 
             VStack(spacing: 4) {
-                Text("Moonlit")
+                Text("Tooth Fairy")
                     .font(.title.bold())
                 Text(appVersion)
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
 
-            Text("Schedule overnight Claude desktop runs.\nMoonlit drives the Claude app via Accessibility — picks the project folder, switches mode, pastes the prompt, sends it.")
+            Text("Schedule Claude desktop runs on your Mac.\nTooth Fairy drives the Claude app via Accessibility — picks the project folder, switches mode, pastes the prompt, sends it.")
                 .multilineTextAlignment(.center)
                 .font(.callout)
                 .foregroundStyle(.secondary)

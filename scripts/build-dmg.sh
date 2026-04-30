@@ -2,48 +2,52 @@
 set -e
 
 # ═══════════════════════════════════════════════════════════════
-# Moonlit — Build, Sign, Notarize, and create DMG
+# Tooth Fairy — Build, Sign, Notarize, and create DMG
 # ═══════════════════════════════════════════════════════════════
 #
-# Mirrors the working TapCut build flow:
+# Build flow:
 #   archive → extract .app from xcarchive → re-sign → DMG → sign → notarize → staple.
 #   `xcodebuild -exportArchive` is intentionally skipped because it corrupts
 #   the binary in a way Apple's notary service rejects.
 #
-# Prerequisites (already set up if you've shipped TapCut):
+# Note: the underlying Xcode project file/scheme is still named "Moonlit"
+# (the app's previous name) — only the produced product is "ToothFairy".
+# Renaming Xcode plumbing is brittle, so we leave it.
+#
+# Prerequisites:
 #   1. Paid Apple Developer account.
 #   2. "Developer ID Application" certificate in Keychain.
-#   3. notarytool keychain profile named "moonlit-notary":
+#   3. notarytool keychain profile named "toothfairy-notary":
 #
-#      xcrun notarytool store-credentials "moonlit-notary" \
+#      xcrun notarytool store-credentials "toothfairy-notary" \
 #          --apple-id "your@email.com" \
 #          --team-id  "UNEZ2C9AKH" \
 #          --password "your-app-specific-password"
 #
-#      (the alias is just a Keychain label; profiles tied to the same
-#      Apple ID/team work for any app, so reusing one across projects is
-#      fine — pick whichever name you like and override via NOTARY_PROFILE)
+#      (the alias is just a Keychain label; any profile tied to the same
+#      Apple ID/team works regardless of the app being shipped)
 #
 # Usage:
 #   ./scripts/build-dmg.sh
 #
 # Output:
-#   dist/Moonlit-vX.Y.Z.dmg (signed + notarized + stapled)
+#   dist/ToothFairy-vX.Y.Z.dmg (signed + notarized + stapled)
 # ═══════════════════════════════════════════════════════════════
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 BUILD_DIR="$PROJECT_ROOT/build"
 DIST_DIR="$PROJECT_ROOT/dist"
-APP_NAME="Moonlit"
-BUNDLE_NAME="Moonlit"
-BUNDLE_ID="com.mario.Moonlit"
+APP_NAME="Tooth Fairy"           # DMG volume label (display name, can have spaces)
+BUNDLE_NAME="ToothFairy"          # actual .app bundle name produced by the build (no spaces)
+ARCHIVE_NAME="ToothFairy"         # .xcarchive name
+BUNDLE_ID="com.mario.ToothFairy"
 TEAM_ID="${TEAM_ID:-UNEZ2C9AKH}"
-NOTARY_PROFILE="${NOTARY_PROFILE:-moonlit-notary}"
+NOTARY_PROFILE="${NOTARY_PROFILE:-toothfairy-notary}"
 ENTITLEMENTS_FILE="$PROJECT_ROOT/Moonlit/Moonlit.entitlements"
 
 VERSION=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "$PROJECT_ROOT/Moonlit/Info.plist" 2>/dev/null || echo "0.1.0")
-DMG_NAME="Moonlit-v$VERSION"
+DMG_NAME="ToothFairy-v$VERSION"
 
 echo "═══ Building $APP_NAME v$VERSION ═══"
 echo ""
@@ -60,7 +64,7 @@ xcodebuild archive \
     -project Moonlit.xcodeproj \
     -scheme Moonlit \
     -configuration Release \
-    -archivePath "$BUILD_DIR/$APP_NAME.xcarchive" \
+    -archivePath "$BUILD_DIR/$ARCHIVE_NAME.xcarchive" \
     CODE_SIGN_IDENTITY="Developer ID Application" \
     DEVELOPMENT_TEAM="$TEAM_ID" \
     CODE_SIGN_STYLE=Manual \
@@ -68,7 +72,7 @@ xcodebuild archive \
     OTHER_CODE_SIGN_FLAGS="--timestamp --options runtime" \
     2>&1 | tail -5
 
-if [ ! -d "$BUILD_DIR/$APP_NAME.xcarchive" ]; then
+if [ ! -d "$BUILD_DIR/$ARCHIVE_NAME.xcarchive" ]; then
     echo "✗ Archive failed"
     exit 1
 fi
@@ -78,7 +82,7 @@ echo "✓ Archive created"
 echo "→ Extracting .app from archive..."
 rm -rf "$BUILD_DIR/export"
 mkdir -p "$BUILD_DIR/export"
-cp -R "$BUILD_DIR/$APP_NAME.xcarchive/Products/Applications/$BUNDLE_NAME.app" "$BUILD_DIR/export/"
+cp -R "$BUILD_DIR/$ARCHIVE_NAME.xcarchive/Products/Applications/$BUNDLE_NAME.app" "$BUILD_DIR/export/"
 APP_PATH="$BUILD_DIR/export/$BUNDLE_NAME.app"
 
 if [ ! -d "$APP_PATH" ]; then
@@ -154,10 +158,10 @@ else
 fi
 
 # ── Stable-filename copy ───────────────────────────────────────────────────
-# Maintain `dist/Moonlit.dmg` alongside the versioned DMG so the website's
+# Maintain `dist/ToothFairy.dmg` alongside the versioned DMG so the website's
 # "Download for macOS" button can use a permalink that survives version bumps:
-#   https://github.com/Necioterco/moonlit/releases/latest/download/Moonlit.dmg
-DMG_STABLE="$DIST_DIR/Moonlit.dmg"
+#   https://github.com/Necioterco/tooth-fairy/releases/latest/download/ToothFairy.dmg
+DMG_STABLE="$DIST_DIR/ToothFairy.dmg"
 cp "$DMG_FINAL" "$DMG_STABLE"
 echo "✓ Stable copy: $DMG_STABLE"
 
@@ -171,4 +175,4 @@ echo "  Size:   $(du -h "$DMG_FINAL" | cut -f1)"
 echo ""
 echo "→ To publish:"
 echo "    gh release create v$VERSION \"$DMG_FINAL\" \"$DMG_STABLE\" \\"
-echo "        --title \"Moonlit v$VERSION\" --notes \"…\""
+echo "        --title \"Tooth Fairy v$VERSION\" --notes \"…\""

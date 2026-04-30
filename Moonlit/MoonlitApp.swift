@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct MoonlitApp: App {
+struct ToothFairyApp: App {
     @StateObject private var taskStore = TaskStore()
     @StateObject private var scheduler: Scheduler
 
@@ -17,7 +17,7 @@ struct MoonlitApp: App {
                 .environmentObject(taskStore)
                 .environmentObject(scheduler)
         } label: {
-            Image(systemName: "moon.stars")
+            Image(systemName: "sparkles")
         }
         .menuBarExtraStyle(.window)
     }

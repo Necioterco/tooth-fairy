@@ -51,17 +51,21 @@ struct MenuBarView: View {
 
     private var header: some View {
         HStack {
-            Image(systemName: "moon.stars.fill")
-                .foregroundStyle(.purple)
+            Image(systemName: "sparkles")
+                .foregroundStyle(LinearGradient(
+                    colors: [.pink, .purple],
+                    startPoint: .top,
+                    endPoint: .bottom
+                ))
                 .font(.title3)
-            Text("Moonlit")
+            Text("Tooth Fairy")
                 .font(.title3.bold())
             Spacer()
 
             Menu {
                 Button("Add scheduled task") { screen = .add }
                 Divider()
-                Button("About Moonlit") { screen = .about }
+                Button("About Tooth Fairy") { screen = .about }
                 Divider()
                 Button("Quit") { NSApplication.shared.terminate(nil) }
             } label: {
@@ -84,16 +88,16 @@ struct MenuBarView: View {
     private var permissionGate: some View {
         VStack(spacing: 14) {
             Spacer(minLength: 8)
-            Image(systemName: "moon.zzz.fill")
+            Image(systemName: "sparkles")
                 .font(.system(size: 44))
                 .foregroundStyle(LinearGradient(
-                    colors: [.purple, .indigo],
+                    colors: [.pink, .purple],
                     startPoint: .top,
                     endPoint: .bottom
                 ))
             Text("Accessibility access needed")
                 .font(.headline)
-            Text("Moonlit needs Accessibility to control Claude desktop on your behalf.")
+            Text("Tooth Fairy needs Accessibility to control Claude desktop on your behalf.")
                 .font(.callout)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -224,7 +228,7 @@ struct MenuBarView: View {
 
     private var emptyScheduled: some View {
         VStack(spacing: 12) {
-            Image(systemName: "moon.zzz")
+            Image(systemName: "sparkles")
                 .font(.title)
                 .foregroundStyle(.tertiary)
             Text("Nothing scheduled")
@@ -257,7 +261,7 @@ struct MenuBarView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
             } else {
-                Image(systemName: "moon.fill")
+                Image(systemName: "sparkle")
                     .foregroundStyle(.tertiary)
                     .font(.caption)
                 Text("Nothing scheduled")
@@ -273,7 +277,7 @@ struct MenuBarView: View {
                     .foregroundStyle(.tertiary)
             }
             .buttonStyle(.plain)
-            .help("About Moonlit")
+            .help("About Tooth Fairy")
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 10)

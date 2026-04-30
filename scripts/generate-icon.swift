@@ -1,7 +1,8 @@
 #!/usr/bin/env swift
 //
-// Generates Moonlit's app icon at every size macOS needs and writes the
-// AppIcon.appiconset under Moonlit/Assets.xcassets. Run from the project root:
+// Generates Tooth Fairy's app icon at every size macOS needs and writes the
+// AppIcon.appiconset under Moonlit/Assets.xcassets. Run from the project
+// root:
 //
 //     swift scripts/generate-icon.swift
 //
@@ -17,7 +18,6 @@ let iconsetDir = "\(outputRoot)/AppIcon.appiconset"
 let fm = FileManager.default
 try? fm.createDirectory(atPath: iconsetDir, withIntermediateDirectories: true)
 
-// Top-level Assets.xcassets/Contents.json
 let topContents = """
 {
   "info" : {
@@ -28,9 +28,32 @@ let topContents = """
 """
 try? topContents.write(toFile: "\(outputRoot)/Contents.json", atomically: true, encoding: .utf8)
 
-// Sizes we need (px). macOS app icons require 1x + 2x variants of each
-// logical size — the Contents.json maps the same physical files to those.
 let sizes: [Int] = [16, 32, 64, 128, 256, 512, 1024]
+
+/// Draws a four-point sparkle/star centred on (cx, cy) with the given radius.
+/// Two perpendicular tapered diamonds — the classic "fairy magic" sparkle.
+func drawSparkle(at center: NSPoint, radius: CGFloat, color: NSColor) {
+    color.setFill()
+    let waist: CGFloat = radius * 0.18
+
+    // Vertical diamond (top-bottom long axis).
+    let v = NSBezierPath()
+    v.move(to: NSPoint(x: center.x, y: center.y + radius))
+    v.line(to: NSPoint(x: center.x + waist, y: center.y))
+    v.line(to: NSPoint(x: center.x, y: center.y - radius))
+    v.line(to: NSPoint(x: center.x - waist, y: center.y))
+    v.close()
+    v.fill()
+
+    // Horizontal diamond.
+    let h = NSBezierPath()
+    h.move(to: NSPoint(x: center.x + radius, y: center.y))
+    h.line(to: NSPoint(x: center.x + waist, y: center.y - waist))
+    h.line(to: NSPoint(x: center.x - radius, y: center.y))
+    h.line(to: NSPoint(x: center.x - waist, y: center.y + waist))
+    h.close()
+    h.fill()
+}
 
 func renderIcon(pixelSize: Int) -> Data? {
     guard let bitmap = NSBitmapImageRep(
@@ -53,79 +76,50 @@ func renderIcon(pixelSize: Int) -> Data? {
     let s = CGFloat(pixelSize)
     let rect = NSRect(x: 0, y: 0, width: s, height: s)
 
-    // ── Background: rounded square with purple/indigo gradient ──────────
-    let cornerRadius = s * 0.22 // macOS Big Sur+ icon radius
+    // ── Background: rounded square with pink → purple gradient ──────────
+    let cornerRadius = s * 0.22
     let bgPath = NSBezierPath(roundedRect: rect, xRadius: cornerRadius, yRadius: cornerRadius)
 
-    let topColor = NSColor(red: 0.55, green: 0.36, blue: 0.96, alpha: 1.0)    // violet
-    let bottomColor = NSColor(red: 0.31, green: 0.27, blue: 0.90, alpha: 1.0) // indigo
+    let topColor = NSColor(red: 0.98, green: 0.62, blue: 0.86, alpha: 1.0)    // soft pink
+    let bottomColor = NSColor(red: 0.62, green: 0.36, blue: 0.94, alpha: 1.0) // lavender purple
     let gradient = NSGradient(starting: topColor, ending: bottomColor)
 
     NSGraphicsContext.current?.saveGraphicsState()
     bgPath.addClip()
     gradient?.draw(in: rect, angle: 270)
 
-    // Subtle highlight at the top to give the icon a soft, glassy feel.
+    // Soft top highlight for a glassy feel.
     let highlight = NSGradient(
-        starting: NSColor.white.withAlphaComponent(0.16),
+        starting: NSColor.white.withAlphaComponent(0.20),
         ending: NSColor.white.withAlphaComponent(0)
     )
     highlight?.draw(in: rect, angle: 270)
     NSGraphicsContext.current?.restoreGraphicsState()
 
-    // ── Crescent moon ─────────────────────────────────────────────────────
-    // Drawn as a white disc with a slightly offset gradient-coloured disc on
-    // top to "carve out" the crescent shape.
-    let moonScale: CGFloat = 0.58
-    let moonSize = s * moonScale
-    let moonRect = NSRect(
-        x: (s - moonSize) / 2 - s * 0.02,
-        y: (s - moonSize) / 2 - s * 0.02,
-        width: moonSize,
-        height: moonSize
-    )
-    NSColor.white.setFill()
-    NSBezierPath(ovalIn: moonRect).fill()
+    // ── Big sparkle in the centre ─────────────────────────────────────────
+    let bigCenter = NSPoint(x: s * 0.50, y: s * 0.50)
+    let bigRadius = s * 0.32
+    drawSparkle(at: bigCenter, radius: bigRadius, color: .white)
 
-    // Carve crescent
-    let carveSize = moonSize * 1.0
-    let carveRect = NSRect(
-        x: moonRect.origin.x + moonSize * 0.28,
-        y: moonRect.origin.y + moonSize * 0.22,
-        width: carveSize,
-        height: carveSize
-    )
-    // Use a colour matching the gradient near the moon's vertical position
-    // so the carved-out region blends seamlessly.
-    NSColor(red: 0.40, green: 0.31, blue: 0.93, alpha: 1.0).setFill()
-    NSBezierPath(ovalIn: carveRect).fill()
-
-    // ── Stars ────────────────────────────────────────────────────────────
-    let starColor = NSColor.white
-    starColor.setFill()
-    // (x, y, size) all relative to icon size. Skip stars at very small sizes
-    // to avoid muddy speckles.
-    let stars: [(CGFloat, CGFloat, CGFloat)] = pixelSize >= 64
-        ? [
-            (0.18, 0.80, 0.045),
-            (0.82, 0.30, 0.040),
-            (0.88, 0.62, 0.028),
-            (0.22, 0.42, 0.030),
-        ]
-        : [
-            (0.20, 0.80, 0.06),
-            (0.82, 0.30, 0.06),
-        ]
-
-    for (xRel, yRel, sizeRel) in stars {
-        let dia = s * sizeRel
-        let starRect = NSRect(
-            x: s * xRel - dia / 2,
-            y: s * yRel - dia / 2,
-            width: dia,
-            height: dia
+    // ── Smaller accompanying sparkles (skip at very small sizes) ─────────
+    if pixelSize >= 64 {
+        drawSparkle(
+            at: NSPoint(x: s * 0.78, y: s * 0.78),
+            radius: s * 0.10,
+            color: NSColor.white.withAlphaComponent(0.95)
         )
-        NSBezierPath(ovalIn: starRect).fill()
+        drawSparkle(
+            at: NSPoint(x: s * 0.22, y: s * 0.22),
+            radius: s * 0.08,
+            color: NSColor.white.withAlphaComponent(0.85)
+        )
+    }
+    if pixelSize >= 128 {
+        drawSparkle(
+            at: NSPoint(x: s * 0.18, y: s * 0.78),
+            radius: s * 0.06,
+            color: NSColor.white.withAlphaComponent(0.75)
+        )
     }
 
     return bitmap.representation(using: .png, properties: [:])
@@ -142,7 +136,6 @@ for size in sizes {
     print("  ✓ icon_\(size).png")
 }
 
-// AppIcon.appiconset/Contents.json — maps the PNG files to the macOS slots.
 let appIconContents = """
 {
   "images" : [

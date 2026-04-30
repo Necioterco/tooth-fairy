@@ -5,7 +5,7 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>en</string>
     <key>CFBundleDisplayName</key>
-    <string>Moonlit</string>
+    <string>Tooth Fairy</string>
     <key>CFBundleExecutable</key>
     <string>$(EXECUTABLE_NAME)</string>
     <key>CFBundleIdentifier</key>
@@ -13,7 +13,7 @@
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleName</key>
-    <string>$(PRODUCT_NAME)</string>
+    <string>Tooth Fairy</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
@@ -27,6 +27,6 @@
     <key>NSHumanReadableCopyright</key>
     <string>Copyright © 2026 Mario. All rights reserved.</string>
     <key>NSAppleEventsUsageDescription</key>
-    <string>Moonlit drives the Claude desktop app to run scheduled prompts on your behalf.</string>
+    <string>Tooth Fairy drives the Claude desktop app to run scheduled prompts on your behalf.</string>
 </dict>
 </plist>
