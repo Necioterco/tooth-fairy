@@ -18,6 +18,12 @@ extension Notification.Name {
     /// Posted from AppDelegate when the user picks "About Tooth Fairy" from
     /// the right-click menu, so the popover can navigate to its About screen.
     static let toothFairyNavigateToAbout = Notification.Name("ToothFairy.navigateToAbout")
+    /// Sent by views that are about to open a modal sheet (e.g. NSOpenPanel).
+    /// AppDelegate temporarily switches the popover to non-transient so the
+    /// sheet's activation doesn't dismiss the popover behind it.
+    static let toothFairySuspendDismiss = Notification.Name("ToothFairy.suspendDismiss")
+    /// Sent after the modal sheet closes — restores transient behaviour.
+    static let toothFairyResumeDismiss = Notification.Name("ToothFairy.resumeDismiss")
 }
 
 @MainActor
@@ -51,6 +57,29 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             .environmentObject(taskStore)
             .environmentObject(scheduler)
         popover.contentViewController = NSHostingController(rootView: root)
+
+        // Listen for "I'm about to open a modal sheet" notifications so the
+        // popover survives NSOpenPanel etc.
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(suspendDismiss),
+            name: .toothFairySuspendDismiss,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(resumeDismiss),
+            name: .toothFairyResumeDismiss,
+            object: nil
+        )
+    }
+
+    @objc private func suspendDismiss() {
+        popover.behavior = .applicationDefined
+    }
+
+    @objc private func resumeDismiss() {
+        popover.behavior = .transient
     }
 
     @objc private func handleClick(_ sender: NSStatusBarButton) {

@@ -64,6 +64,9 @@ struct AddTaskView: View {
                         .textFieldStyle(.roundedBorder)
                     Button("Choose…") { chooseFolder() }
                 }
+                if !recentFolders.isEmpty {
+                    recentFoldersRow
+                }
                 if !projectName.isEmpty {
                     Text("Will appear in Claude as: \(projectName)")
                         .font(.caption2)
@@ -136,28 +139,102 @@ struct AddTaskView: View {
         onClose()
     }
 
+    // MARK: - Recent folders
+
+    /// Distinct folder paths from prior tasks, ordered by most-recent use.
+    /// Capped at 5 so the row stays compact.
+    private var recentFolders: [String] {
+        var seen = Set<String>()
+        var ordered: [String] = []
+        let sortedTasks = taskStore.tasks.sorted { lhs, rhs in
+            let l = lhs.completedAt ?? lhs.startedAt ?? lhs.scheduledAt
+            let r = rhs.completedAt ?? rhs.startedAt ?? rhs.scheduledAt
+            return l > r
+        }
+        for task in sortedTasks {
+            guard let path = task.folderPath, !path.isEmpty else { continue }
+            if seen.insert(path).inserted {
+                ordered.append(path)
+                if ordered.count >= 5 { break }
+            }
+        }
+        return ordered
+    }
+
+    private var recentFoldersRow: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 6) {
+                Text("Recent:")
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+                ForEach(recentFolders, id: \.self) { path in
+                    let name = URL(fileURLWithPath: path).lastPathComponent
+                    let isActive = path == folderPath
+                    Button {
+                        folderPath = path
+                        projectName = name
+                    } label: {
+                        Text(name)
+                            .font(.caption)
+                            .padding(.horizontal, 9)
+                            .padding(.vertical, 4)
+                            .background(isActive ? Color.accentColor.opacity(0.18) : Color.secondary.opacity(0.12))
+                            .foregroundStyle(isActive ? Color.accentColor : .primary)
+                            .clipShape(Capsule())
+                    }
+                    .buttonStyle(.plain)
+                    .help(path)
+                }
+            }
+        }
+    }
+
     // MARK: - Schedule UI
 
     private var scheduleSection: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: 8) {
             Text("When").font(.caption.bold()).foregroundStyle(.secondary)
 
-            // Calendar grid — way easier to scan than a numeric date field.
-            DatePicker(
-                "",
-                selection: $scheduledAt,
-                in: Date()...,
-                displayedComponents: .date
-            )
-            .labelsHidden()
-            .datePickerStyle(.graphical)
-            .frame(maxWidth: .infinity)
+            // Date row — calendar icon + day / month / year dropdowns.
+            HStack(spacing: 6) {
+                Image(systemName: "calendar")
+                    .foregroundStyle(.secondary)
 
-            // Time as three menu pickers — hour, minute, AM/PM. Each opens a
-            // dropdown on click, no fiddly steppers or text fields.
+                Picker("", selection: dayBinding) {
+                    ForEach(1...daysInCurrentMonth, id: \.self) { d in
+                        Text("\(d)").tag(d)
+                    }
+                }
+                .labelsHidden()
+                .pickerStyle(.menu)
+                .frame(width: 64)
+
+                Picker("", selection: monthBinding) {
+                    ForEach(1...12, id: \.self) { m in
+                        Text(monthName(m)).tag(m)
+                    }
+                }
+                .labelsHidden()
+                .pickerStyle(.menu)
+                .frame(width: 110)
+
+                Picker("", selection: yearBinding) {
+                    ForEach(yearRange, id: \.self) { y in
+                        Text(verbatim: String(y)).tag(y)
+                    }
+                }
+                .labelsHidden()
+                .pickerStyle(.menu)
+                .frame(width: 80)
+
+                Spacer()
+            }
+
+            // Time row — clock icon + hour / minute / AM-PM dropdowns.
             HStack(spacing: 6) {
                 Image(systemName: "clock")
                     .foregroundStyle(.secondary)
+
                 Picker("", selection: hourBinding) {
                     ForEach(1...12, id: \.self) { h in
                         Text(String(format: "%d", h)).tag(h)
@@ -196,7 +273,81 @@ struct AddTaskView: View {
         }
     }
 
-    // MARK: - Time bindings (decompose / recompose `scheduledAt`)
+    // MARK: - Date helpers
+
+    private var daysInCurrentMonth: Int {
+        let cal = Calendar.current
+        return cal.range(of: .day, in: .month, for: scheduledAt)?.count ?? 31
+    }
+
+    private var yearRange: [Int] {
+        let currentYear = Calendar.current.component(.year, from: Date())
+        return Array(currentYear...(currentYear + 5))
+    }
+
+    private func monthName(_ m: Int) -> String {
+        let f = DateFormatter()
+        return f.monthSymbols[m - 1]
+    }
+
+    // MARK: - Date / time bindings (decompose / recompose `scheduledAt`)
+
+    private var dayBinding: Binding<Int> {
+        Binding(
+            get: { Calendar.current.component(.day, from: scheduledAt) },
+            set: { newDay in
+                let cal = Calendar.current
+                var comps = cal.dateComponents([.year, .month, .hour, .minute], from: scheduledAt)
+                comps.day = newDay
+                if let d = cal.date(from: comps) {
+                    scheduledAt = d
+                }
+            }
+        )
+    }
+
+    private var monthBinding: Binding<Int> {
+        Binding(
+            get: { Calendar.current.component(.month, from: scheduledAt) },
+            set: { newMonth in
+                let cal = Calendar.current
+                var comps = cal.dateComponents([.year, .day, .hour, .minute], from: scheduledAt)
+                comps.month = newMonth
+                // Clamp the day if the new month has fewer days (Feb 31 → 28/29).
+                if let firstOfMonth = cal.date(from: DateComponents(year: comps.year, month: newMonth, day: 1)),
+                   let range = cal.range(of: .day, in: .month, for: firstOfMonth),
+                   let day = comps.day,
+                   day > range.count {
+                    comps.day = range.count
+                }
+                if let d = cal.date(from: comps) {
+                    scheduledAt = d
+                }
+            }
+        )
+    }
+
+    private var yearBinding: Binding<Int> {
+        Binding(
+            get: { Calendar.current.component(.year, from: scheduledAt) },
+            set: { newYear in
+                let cal = Calendar.current
+                var comps = cal.dateComponents([.month, .day, .hour, .minute], from: scheduledAt)
+                comps.year = newYear
+                // Re-clamp day for leap-year edge case (Feb 29 → Feb 28).
+                if let m = comps.month,
+                   let firstOfMonth = cal.date(from: DateComponents(year: newYear, month: m, day: 1)),
+                   let range = cal.range(of: .day, in: .month, for: firstOfMonth),
+                   let day = comps.day,
+                   day > range.count {
+                    comps.day = range.count
+                }
+                if let d = cal.date(from: comps) {
+                    scheduledAt = d
+                }
+            }
+        )
+    }
 
     private var hourBinding: Binding<Int> {
         Binding(
@@ -260,6 +411,15 @@ struct AddTaskView: View {
     }
 
     private func chooseFolder() {
+        // Tell AppDelegate to keep the popover open across the modal sheet.
+        // Without this, NSOpenPanel's activation makes the menu-bar popover
+        // dismiss itself, forcing the user to click the menu bar icon again
+        // after picking a folder.
+        NotificationCenter.default.post(name: .toothFairySuspendDismiss, object: nil)
+        defer {
+            NotificationCenter.default.post(name: .toothFairyResumeDismiss, object: nil)
+        }
+
         let panel = NSOpenPanel()
         panel.canChooseDirectories = true
         panel.canChooseFiles = false
