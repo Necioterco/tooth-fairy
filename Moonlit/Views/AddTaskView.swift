@@ -139,51 +139,108 @@ struct AddTaskView: View {
     // MARK: - Schedule UI
 
     private var scheduleSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 10) {
             Text("When").font(.caption.bold()).foregroundStyle(.secondary)
 
-            // Quick presets — one tap = done in the common cases.
+            // Calendar grid — way easier to scan than a numeric date field.
+            DatePicker(
+                "",
+                selection: $scheduledAt,
+                in: Date()...,
+                displayedComponents: .date
+            )
+            .labelsHidden()
+            .datePickerStyle(.graphical)
+            .frame(maxWidth: .infinity)
+
+            // Time as three menu pickers — hour, minute, AM/PM. Each opens a
+            // dropdown on click, no fiddly steppers or text fields.
             HStack(spacing: 6) {
-                ForEach(SchedulePreset.allCases, id: \.self) { preset in
-                    presetChip(preset)
-                }
-            }
-
-            // Always-visible date + time pickers for custom adjustments.
-            HStack(spacing: 10) {
-                DatePicker("", selection: $scheduledAt, in: Date()..., displayedComponents: .date)
-                    .labelsHidden()
-                    .datePickerStyle(.field)
-                DatePicker("", selection: $scheduledAt, in: Date()..., displayedComponents: .hourAndMinute)
-                    .labelsHidden()
-                    .datePickerStyle(.stepperField)
-            }
-
-            // Live preview so you always know exactly when this will fire.
-            HStack(spacing: 4) {
                 Image(systemName: "clock")
-                    .font(.caption2)
-                Text(scheduleSummary)
-                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Picker("", selection: hourBinding) {
+                    ForEach(1...12, id: \.self) { h in
+                        Text(String(format: "%d", h)).tag(h)
+                    }
+                }
+                .labelsHidden()
+                .pickerStyle(.menu)
+                .frame(width: 64)
+
+                Text(":").foregroundStyle(.secondary)
+
+                Picker("", selection: minuteBinding) {
+                    ForEach([0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55], id: \.self) { m in
+                        Text(String(format: "%02d", m)).tag(m)
+                    }
+                }
+                .labelsHidden()
+                .pickerStyle(.menu)
+                .frame(width: 64)
+
+                Picker("", selection: meridiemBinding) {
+                    Text("AM").tag(false)
+                    Text("PM").tag(true)
+                }
+                .labelsHidden()
+                .pickerStyle(.menu)
+                .frame(width: 70)
+
+                Spacer()
             }
-            .foregroundStyle(.secondary)
+
+            // Live preview — confirms the exact moment this task fires.
+            Text(scheduleSummary)
+                .font(.caption)
+                .foregroundStyle(.secondary)
         }
     }
 
-    private func presetChip(_ preset: SchedulePreset) -> some View {
-        let isActive = preset.matches(scheduledAt)
-        return Button {
-            scheduledAt = preset.date(from: Date())
-        } label: {
-            Text(preset.label)
-                .font(.caption)
-                .padding(.horizontal, 10)
-                .padding(.vertical, 5)
-                .background(isActive ? Color.accentColor.opacity(0.18) : Color.secondary.opacity(0.10))
-                .foregroundStyle(isActive ? Color.accentColor : .primary)
-                .clipShape(Capsule())
-        }
-        .buttonStyle(.plain)
+    // MARK: - Time bindings (decompose / recompose `scheduledAt`)
+
+    private var hourBinding: Binding<Int> {
+        Binding(
+            get: {
+                let h = Calendar.current.component(.hour, from: scheduledAt) % 12
+                return h == 0 ? 12 : h
+            },
+            set: { new12 in
+                let cal = Calendar.current
+                let was24 = cal.component(.hour, from: scheduledAt)
+                let isPM = was24 >= 12
+                let new24 = (new12 % 12) + (isPM ? 12 : 0)
+                if let d = cal.date(bySetting: .hour, value: new24, of: scheduledAt) {
+                    scheduledAt = d
+                }
+            }
+        )
+    }
+
+    private var minuteBinding: Binding<Int> {
+        Binding(
+            get: { Calendar.current.component(.minute, from: scheduledAt) },
+            set: { new in
+                let cal = Calendar.current
+                if let d = cal.date(bySetting: .minute, value: new, of: scheduledAt) {
+                    scheduledAt = d
+                }
+            }
+        )
+    }
+
+    private var meridiemBinding: Binding<Bool> {
+        Binding(
+            get: { Calendar.current.component(.hour, from: scheduledAt) >= 12 },
+            set: { isPM in
+                let cal = Calendar.current
+                let was24 = cal.component(.hour, from: scheduledAt)
+                let h12 = was24 % 12
+                let new24 = h12 + (isPM ? 12 : 0)
+                if let d = cal.date(bySetting: .hour, value: new24, of: scheduledAt) {
+                    scheduledAt = d
+                }
+            }
+        )
     }
 
     private var scheduleSummary: String {
@@ -215,52 +272,3 @@ struct AddTaskView: View {
     }
 }
 
-/// Quick "when" presets surfaced as chips at the top of the schedule section.
-/// Each option computes a concrete date relative to "now", so picking one
-/// always gives a sensible, near-future time without the user touching the
-/// date/time pickers.
-enum SchedulePreset: CaseIterable {
-    case in30min
-    case in1hour
-    case tonight
-    case tomorrowMorning
-
-    var label: String {
-        switch self {
-        case .in30min:          return "In 30 min"
-        case .in1hour:          return "In 1 hour"
-        case .tonight:          return "Tonight 10 PM"
-        case .tomorrowMorning:  return "Tomorrow 9 AM"
-        }
-    }
-
-    func date(from now: Date) -> Date {
-        let cal = Calendar.current
-        switch self {
-        case .in30min:
-            return cal.date(byAdding: .minute, value: 30, to: now) ?? now
-        case .in1hour:
-            return cal.date(byAdding: .hour, value: 1, to: now) ?? now
-        case .tonight:
-            var comps = cal.dateComponents([.year, .month, .day], from: now)
-            comps.hour = 22
-            comps.minute = 0
-            let target = cal.date(from: comps) ?? now
-            // If 10pm has already passed, push to tomorrow night.
-            return target > now ? target : (cal.date(byAdding: .day, value: 1, to: target) ?? target)
-        case .tomorrowMorning:
-            let tomorrow = cal.date(byAdding: .day, value: 1, to: now) ?? now
-            var comps = cal.dateComponents([.year, .month, .day], from: tomorrow)
-            comps.hour = 9
-            comps.minute = 0
-            return cal.date(from: comps) ?? tomorrow
-        }
-    }
-
-    /// True if `date` is within a minute of this preset's computed value.
-    /// Used to highlight the active chip.
-    func matches(_ date: Date) -> Bool {
-        let target = self.date(from: Date())
-        return abs(date.timeIntervalSince(target)) < 60
-    }
-}

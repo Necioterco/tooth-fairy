@@ -82,7 +82,7 @@ struct AboutView: View {
                     Link("mquiroz", destination: URL(string: "https://mquiroz.com")!)
                 }
                 .font(.caption)
-                Text(verbatim: "© \(String(Calendar.current.component(.year, from: Date()))) Lasso MD")
+                Text(verbatim: "© \(String(Calendar.current.component(.year, from: Date())))")
                     .font(.caption2)
                     .foregroundStyle(.tertiary)
             }
