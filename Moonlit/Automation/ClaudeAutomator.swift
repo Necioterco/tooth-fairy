@@ -122,11 +122,12 @@ final class ClaudeAutomator {
             Thread.sleep(forTimeInterval: 0.6)
         }
 
-        // Submit via Return. Web-rendered Send buttons often ignore AXPress,
-        // and the prompt input is already focused, so a Return keypress is
-        // the most reliable submission path.
-        log(LogEntry(level: .info, message: "Submitting via Return"))
-        sendKey(keyCode: 36) // Return
+        // Submit. Try plain Return first (Claude's normal submit binding).
+        // If the prompt is still in the input after a brief wait, fall back to
+        // ⌘+Return, then to clicking the Send button by mouse. This guards
+        // against focus drift and against Return being interpreted as a
+        // newline insertion.
+        try submitPrompt(prompt: prompt, input: inputForPaste, in: app, log: log)
 
         // Wipe our prompt off the system pasteboard once Claude has it. We
         // only clear if the pasteboard still matches what we wrote — that
@@ -135,6 +136,50 @@ final class ClaudeAutomator {
         clearPasteboardIfMatches(prompt)
 
         log(LogEntry(level: .info, message: "Done"))
+    }
+
+    private func submitPrompt(prompt: String, input: AXElement, in app: AXElement, log: LogHandler) throws {
+        // Strategy 1: plain Return.
+        log(LogEntry(level: .info, message: "Submitting via Return"))
+        sendKey(keyCode: 36)
+        if waitForInputCleared(input, original: prompt, timeout: 1.5) { return }
+
+        // Strategy 2: ⌘+Return (some Claude builds bind this to send).
+        log(LogEntry(level: .warning, message: "Return didn't submit — trying ⌘+Return"))
+        // Re-focus first in case focus drifted (e.g. into a side panel).
+        _ = clickElement(input)
+        Thread.sleep(forTimeInterval: 0.2)
+        sendKey(keyCode: 36, modifiers: .maskCommand)
+        if waitForInputCleared(input, original: prompt, timeout: 1.5) { return }
+
+        // Strategy 3: click the Send button directly.
+        log(LogEntry(level: .warning, message: "⌘+Return didn't submit — clicking Send button"))
+        if let sendBtn = app.first(where: { el in
+            el.role == kAXButtonRole &&
+            (el.label == "Send" || el.title == "Send" || el.axLabel == "Send")
+        }) {
+            if !clickElement(sendBtn) {
+                _ = sendBtn.press()
+            }
+            if waitForInputCleared(input, original: prompt, timeout: 1.5) { return }
+        }
+
+        log(LogEntry(level: .error, message: "Prompt didn't submit — input still contains the original text"))
+        throw AutomationError.sendButtonNotFound
+    }
+
+    /// Returns true once the prompt input no longer contains the original
+    /// text (i.e. submission cleared it). Polls up to `timeout` seconds.
+    private func waitForInputCleared(_ input: AXElement, original: String, timeout: TimeInterval) -> Bool {
+        let deadline = Date().addingTimeInterval(timeout)
+        while Date() < deadline {
+            let current = input.value ?? ""
+            if !current.contains(original) {
+                return true
+            }
+            Thread.sleep(forTimeInterval: 0.15)
+        }
+        return false
     }
 
     private func clearPasteboardIfMatches(_ text: String) {
