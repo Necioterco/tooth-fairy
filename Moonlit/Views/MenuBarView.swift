@@ -35,6 +35,9 @@ struct MenuBarView: View {
         .onAppear {
             permissionGranted = Accessibility.isGranted
         }
+        .onReceive(NotificationCenter.default.publisher(for: .toothFairyNavigateToAbout)) { _ in
+            screen = .about
+        }
     }
 
     // MARK: - List screen
