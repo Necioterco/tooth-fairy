@@ -27,6 +27,13 @@
         </a>
       </div>
       <p class="meta">Free · macOS 13+ · Requires Claude desktop</p>
+
+      <div class="advisory" role="note">
+        <span class="advisory-icon" aria-hidden="true">🔒</span>
+        <div>
+          <strong>Runs locally on your Mac.</strong> Tooth Fairy uses macOS Accessibility to drive the Claude desktop app you already have, signed in with your own account. No API keys, no proxying, no scraping. Not affiliated with Anthropic.
+        </div>
+      </div>
     </header>
 
     <section class="preview" aria-label="Tooth Fairy interface preview">
@@ -84,7 +91,7 @@
       <div class="feature">
         <div class="emoji">⚡</div>
         <h3>Your subscription</h3>
-        <p>Runs through Claude desktop on your Pro or Max plan. No API tokens billed, no extra costs. Optional Auto mode for long unattended runs.</p>
+        <p>Runs through Claude desktop on your Pro or Max plan. No API tokens billed, no extra costs. Auto mode is optional and opt-in per task.</p>
       </div>
     </section>
 
@@ -95,6 +102,18 @@
         <li><strong>Set the time</strong> — when the prompt should fire.</li>
         <li><strong>Write the prompt</strong> — exactly what you'd type into Claude.</li>
         <li><strong>Sleep</strong> — Tooth Fairy handles the rest.</li>
+      </ol>
+    </section>
+
+    <section class="how" aria-label="Trust and safety">
+      <h2>What it is — and what it isn't</h2>
+      <ol>
+        <li><strong>It's a local automation.</strong> Tooth Fairy types into Claude desktop the same way you would, using the macOS Accessibility APIs you grant on first launch.</li>
+        <li><strong>It uses your account.</strong> Sessions run on your Pro or Max plan, in your normal Claude history. No tokens are billed, nothing is proxied through a server.</li>
+        <li><strong>It isn't a jailbreak or a bot farm.</strong> One scheduled prompt at a time, on your own machine. Don't use it to circumvent rate limits or run mass parallel agents — that's against Anthropic's usage policy.</li>
+        <li><strong>Auto mode is your call.</strong> If you enable it for unattended runs, Claude can execute tools without confirmation. Point it at projects where that's safe (clean branch, no production credentials) and treat it like any other automation.</li>
+        <li><strong>Open source.</strong> Read the code, build it yourself, or fork it — <a href="https://github.com/Necioterco/tooth-fairy" rel="noopener">github.com/Necioterco/tooth-fairy</a>.</li>
+        <li><strong>Not affiliated with Anthropic.</strong> "Claude" is Anthropic's trademark; Tooth Fairy is an independent third-party tool that works alongside their desktop app.</li>
       </ol>
     </section>
 
