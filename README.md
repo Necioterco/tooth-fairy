@@ -58,7 +58,7 @@ Moonlit/                          ← project source folder (kept for Xcode plum
 ./scripts/build-dmg.sh
 ```
 
-Outputs `dist/ToothFairy-vX.Y.Z.dmg` and `dist/ToothFairy.dmg` (stable filename). Requires a Developer ID certificate and a `toothfairy-notary` keychain profile — see comments at the top of the script.
+Outputs `dist/ToothFairy-vX.Y.Z.dmg` and `dist/ToothFairy.dmg` (stable filename). Requires a Developer ID certificate and a `tapcut-notary` keychain profile (shared with the Tapcut app) — see comments at the top of the script.
 
 ## Website
 

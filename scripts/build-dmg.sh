@@ -17,15 +17,17 @@ set -e
 # Prerequisites:
 #   1. Paid Apple Developer account.
 #   2. "Developer ID Application" certificate in Keychain.
-#   3. notarytool keychain profile named "toothfairy-notary":
+#   3. notarytool keychain profile named "tapcut-notary" (shared with the
+#      Tapcut app — same Apple ID + Team ID work for any of Mario's apps):
 #
-#      xcrun notarytool store-credentials "toothfairy-notary" \
+#      xcrun notarytool store-credentials "tapcut-notary" \
 #          --apple-id "your@email.com" \
 #          --team-id  "UNEZ2C9AKH" \
 #          --password "your-app-specific-password"
 #
 #      (the alias is just a Keychain label; any profile tied to the same
-#      Apple ID/team works regardless of the app being shipped)
+#      Apple ID/team works regardless of the app being shipped. Override
+#      the default by setting NOTARY_PROFILE=<alias> before running.)
 #
 # Usage:
 #   ./scripts/build-dmg.sh
@@ -43,7 +45,7 @@ BUNDLE_NAME="ToothFairy"          # actual .app bundle name produced by the buil
 ARCHIVE_NAME="ToothFairy"         # .xcarchive name
 BUNDLE_ID="com.mario.ToothFairy"
 TEAM_ID="${TEAM_ID:-UNEZ2C9AKH}"
-NOTARY_PROFILE="${NOTARY_PROFILE:-toothfairy-notary}"
+NOTARY_PROFILE="${NOTARY_PROFILE:-tapcut-notary}"
 ENTITLEMENTS_FILE="$PROJECT_ROOT/Moonlit/Moonlit.entitlements"
 
 VERSION=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "$PROJECT_ROOT/Moonlit/Info.plist" 2>/dev/null || echo "0.1.0")
